@@ -1,8 +1,9 @@
 import streamlit as st
-from transformers import AutoTokenizer, AutoModelForCausalLM
+import h 
 
-tokenizer = AutoTokenizer.from_pretrained("mosaicml/mpt-7b-storywriter", trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained("mosaicml/mpt-7b-storywriter", trust_remote_code=True)
+st.header("Educational lll")
 
 st.write("ghjkl")
 st.write("ghjk")
+
+st.write(h.text)
