@@ -7,4 +7,6 @@ Solución Moderna a la Enseñanza Especializada
 _Educar según este modelo [personalizado] es un reto para los docentes que requiere de una formación continua y una actualización permanente_
 
 # Technología
---> Uso del modelo de IA _FRIDA_ de Softek, entrenandola usando **Retrieval Augmented Generation (RAG)**
+--> Uso del modelo de IA _FRIDA_ de Softek, entrenandola usando **Retrieval Augmented Generation (RAG)** con las librerías de **SentenceTransformers** y **FAISS**
+--> Diseño Front-end con **Node.js**
+--> Base de datos de **SQL** para un manejo de datos seguro y confiable
