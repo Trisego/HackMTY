@@ -29,7 +29,7 @@ def retrieve_documents(query, document_embeddings, documents, top_n=2):
     
     similarities = cos_sim(query_embedding, document_embeddings)
     
-    top_indices = np.argsort(similarities[0])[::-1][:top_n]
+    top_indices = np.argsort(similarities[0])[::1][:top_n]
     
     top_documents = [documents[i] for i in top_indices]
     return top_documents
