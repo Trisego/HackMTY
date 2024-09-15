@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasySolve</title>
+    <link rel="stylesheet" href="style/styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">EasySolve</div>
+        <div class="dropdown">
+            <button class="dropdown-toggle" id="dropdownMenuButton">
+              <span id="user-name">Username</span>
+            </button>
+            <div class="dropdown-content"  style="right: 0;" aria-labelledby="dropdownMenuButton">
+              <a id="user-email">user@example.com</a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout">Logout</a>
+            </div>
+          </div>
+    </header>
+    <main>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+        <h1>Students</h1>
+        
+         </div>
+         <div>
+          <button id="generateWorksheets" style="align-self: center;" onclick="location.href='generate.html'" >Generate Worksheets</button>
+         <button id="openModalBtn" style="align-self: center;">Add student</button>
+        </div>
+        </div>
+        <div class="red-line"></div>
+
+
+        <h4 id="completed"> Student Added Successfully</h4>
+        <h4 id="failure"> Failure adding student </h4>
+      
+       
+        <div class="students-container" id="students-container" >
+            <!-- Students will be populated here -->
+            </div>
+    </main>
+
+
+      <!-- Modal Structure -->
+    
+
+    <div id="add-student-modal" class="modal" style="display:none;">
+        <div id="add-student-modal-contents">
+            <div class="modal-content">
+                <h4>Add Student</h4>
+                <br>
+                <form id="studentForm">
+                    <input type="text" name="name" placeholder="Student Name" required />
+                    <input type="number" name="age" placeholder="Age" required />
+                    <select name="gender" required>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <input type="text" name="hobbies" placeholder="Hobbies (comma-separated)" />
+                    <input type="text" name="passions" placeholder="Passions (comma-separated)" />
+                    <input type="text" name="grade_level" placeholder="Grade Level" required />
+                    <input type="text" name="best_friend_name" placeholder="Best Friend's Name" />
+                    <input type="text" name="favorite_food" placeholder="Favorite Food" />
+                    <textarea name="additional_info" placeholder="Additional Info"></textarea>
+
+                    <button type="submit" id="submitBtn">Submit</button>
+                    <button type="button" id="closeModalBtn">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="update-student-modal" class="modal" style="display:none;">
+      <div id="update-student-modal-contents">
+          <div class="modal-content">
+              <h4>Update Student</h4>
+              <br>
+              <form id="updateStudentForm">
+                  <input type="text" name="name" id="update-name" placeholder="Student Name" required />
+                  <input type="number" name="age" id="update-age" placeholder="Age" required />
+                  <select name="gender" id="update-gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <input type="text" name="hobbies" id="update-hobbies" placeholder="Hobbies (comma-separated)" />
+                  <input type="text" name="passions" id="update-passions" placeholder="Passions (comma-separated)" />
+                  <input type="text" name="grade_level" id="update-grade-level" placeholder="Grade Level" required />
+                  <input type="text" name="best_friend_name" id="update-best-friend-name" placeholder="Best Friend's Name" />
+                  <input type="text" name="favorite_food" id="update-favorite-food" placeholder="Favorite Food" />
+                  <textarea name="additional_info" id="update-additional-info" placeholder="Additional Info"></textarea>
+  
+                  <input type="hidden" id="update-student-id" name="id" />
+                  
+                  <button type="submit" id="updateBtn">Update</button>
+                  <button type="button" id="closeUpdateModalBtn">Cancel</button>
+              </form>
+          </div>
+      </div>
+  </div>
+
+
+
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('/api/user', { redirect: 'follow' });
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            if (response.ok) {
+                const user = await response.json();
+
+                // Update sidebar dropdown with user data
+                document.getElementById('user-name').textContent = user.name;
+                document.getElementById('user-email').textContent = user.email;
+
+                // Fetch and display students
+                await fetchAndDisplayStudents();
+            } else {
+                console.error('Failed to fetch user data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    async function fetchAndDisplayStudents() {
+        try {
+            const studentsResponse = await fetch('/api/students');
+            if (studentsResponse.ok) {
+                const students = await studentsResponse.json();
+                const studentsContainer = document.getElementById('students-container');
+                studentsContainer.innerHTML = '';
+                students.forEach(student => {
+                    const studentDiv = document.createElement('div');
+                    studentDiv.className = 'student';
+                    studentDiv.innerHTML = `
+                        <h3>${student.name}</h3>
+                        <button class="details-btn" style="padding:6px; width:80px; margin-top:20px;  "data-id="${student.id}">Details</button>
+                    `;
+                    studentsContainer.appendChild(studentDiv);
+                });
+
+                // Bind click event to all "Details" buttons
+                document.querySelectorAll('.details-btn').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const studentId = event.target.getAttribute('data-id');
+                        await showStudentDetails(studentId);
+                    });
+                });
+            } else {
+                console.error('Failed to fetch students');
+            }
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
+    }
+
+    async function showStudentDetails(studentId) {
+        try {
+            const studentDetailsResponse = await fetch(`/api/students/${studentId}`);
+            if (studentDetailsResponse.ok) {
+                const student = await studentDetailsResponse.json();
+
+                // Populate the update form fields with the student's data
+                document.getElementById('update-name').value = student.name;
+                document.getElementById('update-age').value = student.age;
+                document.getElementById('update-gender').value = student.gender;
+                document.getElementById('update-hobbies').value = student.hobbies;
+                document.getElementById('update-passions').value = student.passions;
+                document.getElementById('update-grade-level').value = student.grade_level;
+                document.getElementById('update-best-friend-name').value = student.best_friend_name;
+                document.getElementById('update-favorite-food').value = student.favorite_food;
+                document.getElementById('update-additional-info').value = student.additional_info;
+                document.getElementById('update-student-id').value = student.id;
+
+                // Show the update modal
+                document.getElementById('update-student-modal').style.display = 'block';
+            } else {
+                console.error('Failed to fetch student details');
+            }
+        } catch (error) {
+            console.error('Error fetching student details:', error);
+        }
+    }
+
+    // Form submission for adding a new student
+    document.getElementById('studentForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const formObject = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/students', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formObject),
+            });
+
+            if (response.ok) {
+                document.getElementById('completed').style.display = 'block';
+                document.getElementById('failure').style.display = 'none';
+                document.getElementById('add-student-modal').style.display = 'none';
+
+                // Refresh the students list
+                await fetchAndDisplayStudents();
+            } else {
+                document.getElementById('completed').style.display = 'none';
+                document.getElementById('failure').style.display = 'block';
+                document.getElementById('add-student-modal').style.display = 'none';
+            }
+        } catch (error) {
+            document.getElementById('completed').style.display = 'none';
+            document.getElementById('failure').style.display = 'block';
+            document.getElementById('add-student-modal').style.display = 'none';
+            console.error('Error adding student:', error);
+        }
+    });
+
+    // Form submission for updating the student
+    document.getElementById('updateStudentForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const formObject = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch(`/api/students/${formObject.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formObject),
+            });
+
+            if (response.ok) {
+                document.getElementById('update-student-modal').style.display = 'none';
+                await fetchAndDisplayStudents(); // Refresh the students list
+            } else {
+                console.error('Failed to update student');
+            }
+        } catch (error) {
+            console.error('Error updating student:', error);
+        }
+    });
+
+    // Open and close modals
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modal = document.getElementById('add-student-modal');
+
+    openModalBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    const closeUpdateModalBtn = document.getElementById('closeUpdateModalBtn');
+    closeUpdateModalBtn.addEventListener('click', () => {
+        document.getElementById('update-student-modal').style.display = 'none';
+    });
+
+    // Close modals when clicking outside of them
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+        const updateModal = document.getElementById('update-student-modal');
+        if (event.target === updateModal) {
+            updateModal.style.display = 'none';
+        }
+    });
+</script>
+    
+</body>
+</html>

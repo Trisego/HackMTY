@@ -1,0 +1,251 @@
+/* styles.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
+}
+
+header {
+  width: 100%;
+  background-color: #f3843b;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.username {
+  background-color: #f3843b;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+main {
+  align-self:baseline;
+  margin-top: 40px;
+  margin-left: 50px;
+  width: 93%;
+}
+
+h1 {
+  color: #f3843b;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.red-line {
+  align-self:baseline;
+  width: 250px;
+  height: 6px;
+  background-color: #f3843b;
+  margin: 20px 0;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background-color: #c16a31;
+  color: white;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown Content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: small;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropdown-toggle {
+  background-color: #874d27;
+}
+.students-container{
+  margin-top: 50px;
+}
+
+.student{
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 5px;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+
+
+  
+  button:hover {
+    background-color: #c1682d;
+    color: white;
+  }
+  
+  button {
+    background-color:#f3843b;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .modal {
+    display: block; 
+    position: fixed; 
+    z-index: 100; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px; 
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 0px; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+  
+  }
+
+  /* Modal container */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Add some transparency */
+}
+
+/* Modal content box */
+#add-student-modal-contents {
+  background-color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#add-student-modal-contents h4 {
+  text-align: center;
+}
+
+#studentForm input, #studentForm select, #studentForm button {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+
+#studentForm button {
+  background-color: #f3843b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#studentForm button:hover {
+  background-color: #c87035;
+}
+
+#completed{
+  color: rgb(149, 194, 82);
+  border: 1.5px solid rgb(149, 194, 82);
+  text-align: center;
+  margin-left: 30%;
+  margin-right: 30%;
+  border-radius: 5px;
+  display:none;
+
+}
+#failure{
+  color: rgb(255, 72, 72);
+  border: 1.5px solid rgb(255, 72, 72);
+  text-align: center;
+  margin-left: 30%;
+  margin-right: 30%;
+  border-radius: 5px;
+  display:none;
+}
+
+.students-container{
+  display: flex;
+flex-wrap: wrap;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+input, select, button {
+  display: block;
+  width: 100%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,38 @@
+{
+  "name": "pruebaai",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/recaptcha-enterprise": "^5.11.0",
+    "@huggingface/transformers": "^3.0.0-alpha.15",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "connect-session-sequelize": "^7.1.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "faiss": "^1.0.0",
+    "mathjs": "^13.1.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.10.0",
+    "openai": "^4.61.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "sequelize": "^6.37.3",
+    "validator": "^13.12.0",
+    "xlsx": "^0.18.5"
+  }
+}
