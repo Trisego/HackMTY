@@ -10,7 +10,7 @@ client = OpenAI(
 response = client.chat.completions.create(
     model="tgi",
     messages=[
-        {"role": "system", "content": "Tell me a short story"}
+        {"role": "system", "content": "Tell me a short story in less than 50 words"}
     ],
     stream=False
 )
