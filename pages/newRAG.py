@@ -54,7 +54,7 @@ similar_sentences = [stories[idx] for idx in indices[0]]
 question_made = question.join(similar_sentences)
 
 
-st.write(similar_sentences)
+print(similar_sentences)
 
 response = client.chat.completions.create(
         model="tgi",
@@ -65,8 +65,11 @@ response = client.chat.completions.create(
 ans = response.choices[0].message.content
 parts.append(ans)
 
-st.write("Part 1")
-st.write(ans)
+
+
+
+print("Part 1")
+print(ans)
 #st.write(f"part Number {part_number}")
 
 # Follow up with the next parts
@@ -84,6 +87,6 @@ for i in range(1,part_number):
         temperature=0.8,
     )
     parts.append(response.choices[0].message.content)
-    st.write(parts[i])
+    print(parts[i])
 
-st.write("The end")
+print("The end")
