@@ -2,5 +2,4 @@
 Hacks
 
 
-#Technology
-----------------------
+# Technology
