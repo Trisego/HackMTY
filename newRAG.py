@@ -2,15 +2,18 @@ from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
 import numpy as np
 import openai
-import streamlit as st
 import pandas as pd
 import faiss
+import streamlit as st
+
+st.header("Easy Solve")
+st.divider()
 
 
-part_number = 6
-name = "John"
-interest = "Cars"
-subject = "Substraction"
+part_number = int(st.selectbox("Number of chapters", ("1", "2", "3", "4", "5", "6", "7", "8", "9")))
+name = st.text_input("Name")
+interest = st.text_input("Interest")
+subject = st.selectbox("Subject", ("Addition", "Subtraction", "Multiplication", "Division"))
 
 
 parts = []
@@ -23,8 +26,8 @@ client = openai.OpenAI(
 parts = []
 #Create a dataframe with the info to train the gpt model
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-ta = pd.read_excel(r"C:\Users\hansv\Downloads\PromptDataBases (2).xlsx")
-st.dataframe(ta)
+ta = pd.read_excel(r"C:\Users\hansv\Downloads\PromptDataBases (4).xlsx")
+#st.dataframe(ta)
 stories = []
 #Add this data into the list
 for i in range(1, 4):
@@ -48,7 +51,7 @@ question_embedding = embedding_model.encode(question).reshape(1,-1)
 distances = []
 for vector in story_embeddings:
     distances.append(cos_sim(question_embedding, vector))
-    st.write(cos_sim(question_embedding, vector))
+    #st.write(cos_sim(question_embedding, vector))
 distances, indices = index.search(question_embedding, k=3)
 similar_sentences = [stories[idx] for idx in indices[0]]
 question_made = question.join(similar_sentences)
@@ -65,28 +68,34 @@ response = client.chat.completions.create(
 ans = response.choices[0].message.content
 parts.append(ans)
 
+text = ""
+
+with st.expander("See Story"):
+    st.header("Part 1")
+    st.write(ans)
+    text += f"Part 1: {ans} \n"
+
+    #st.write(f"part Number {part_number}")
+
+    # Follow up with the next parts
+    for i in range(1,part_number):
+        st.header(f"Part {i+1}")
+        question = f"""Follow up with the {subject} problem for {name}, he is intermediate {subject} and likes {interest}. Follow the story of {ans}.
+        Make it have a similar structure to the following data, don't explain the process or give answers, instead save them as [answer 1,2,3].
+        It is divided into {part_number} and this is part {i+1}. Just write the part {i+1}, not the next one. No title. Less than 50 words."""
+        prompt = question+(parts[i-1])
+        
+        response = client.chat.completions.create(
+            model="tgi",
+            messages=[{"role": "system", "content": prompt}],
+            stream=False, 
+            temperature=0.8,
+        )
+        parts.append(response.choices[0].message.content)
+        st.write(parts[i])
+        text += f"Part {i+1}: {response.choices[0].message.content}"
+
+    st.write("The end")
 
 
-
-print("Part 1")
-print(ans)
-#st.write(f"part Number {part_number}")
-
-# Follow up with the next parts
-for i in range(1,part_number):
-    st.write(f"Part {i+1}")
-    question = f"""Follow up with the {subject} problem for {name}, he is intermediate {subject} and likes {interest}. Follow the story of {ans}.
-    Make it have a similar structure to the following data, don't explain the process or give answers, instead save them as [answer 1,2,3].
-    It is divided into {part_number} and this is part {i+1}. Just write the part {i+1}, not the next one. Less than 50 words."""
-    prompt = question+(parts[i-1])
-    
-    response = client.chat.completions.create(
-        model="tgi",
-        messages=[{"role": "system", "content": prompt}],
-        stream=False, 
-        temperature=0.8,
-    )
-    parts.append(response.choices[0].message.content)
-    print(parts[i])
-
-print("The end")
+#st.write(text)

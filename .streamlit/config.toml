@@ -1,0 +1,7 @@
+[theme]
+base="dark"
+primaryColor="DarkRed"
+backgroundColor="#870f0f"
+secondaryBackgroundColor = "#994017"
+textColor = "White"
+font="Lucida Console"
